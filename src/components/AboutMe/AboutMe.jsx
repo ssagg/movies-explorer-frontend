@@ -1,4 +1,5 @@
 import "./AboutMe.scss";
+
 function AboutMe() {
   return (
     <section className='about-me' id='test'>
