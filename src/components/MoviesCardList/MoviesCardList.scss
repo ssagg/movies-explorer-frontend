@@ -1,0 +1,32 @@
+.movies-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 30px;
+  row-gap: 58px;
+  max-width: 1200px;
+  margin: 46px 70px 0;
+}
+
+@media (max-width: 1170px) {
+  .movies-list {
+    grid-template-columns: repeat(2, 339px);
+    row-gap: 47px;
+    justify-content: center;
+    margin: 70px 30px 0;
+  }
+}
+
+@media (max-width: 750px) {
+  .movies-list {
+    grid-template-columns: repeat(1, 339px);
+    justify-content: center;
+  }
+}
+
+@media (max-width: 550px) {
+  .movies-list {
+    grid-template-columns: repeat(1, 300px);
+    justify-content: center;
+    margin: 40px 10px 0;
+  }
+}
