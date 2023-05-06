@@ -4,10 +4,6 @@ import React, { useState } from "react";
 function MoviesCard({ movie, handleLikeClick, onCardLike }) {
   const [isLiked, setIsLiked] = useState(false);
   const [showButton, setShowButton] = useState(false);
-  // const cardLikeButtonClassName = `movie-card__save-button ${
-  //   isLiked && "movie-card__save-button_active"
-  // }`;
-
   const showLikeButtonClassName = `movie-card__save-button ${
     showButton && "movie-card__save-button_show"
   } ${isLiked && "movie-card__save-button_active"}`;

@@ -4,7 +4,6 @@ function Navigation({ onMenuClick }) {
   return (
     <nav className='navigation'>
       <Link className='navigation__logo' to='/'></Link>
-      {/* <div className='navigation__logo'></div> */}
       <div className='navigation__menu'>
         <NavLink
           to='/movies'
