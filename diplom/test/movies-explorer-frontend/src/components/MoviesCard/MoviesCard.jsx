@@ -41,7 +41,6 @@ function MoviesCard({ movie, handleLikeClick, onCardLike }) {
       >
         Сохранить
       </button>
-
       <div className='movie-card__text'>
         <h3 className='movie-card__title'>{movie.nameRU}</h3>
         <p className='movie-card__duration'>
