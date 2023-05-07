@@ -4,6 +4,8 @@ frontend для дипллмной работы movies explore со следую
 
 Адрес репозитория: https://github.com/ssagg/movies-explorer-frontend/tree/level-2
 
+Figma https://disk.yandex.ru/d/g74ZQv9Oy18lfA
+
 ## Технологии
 
 JS, React
