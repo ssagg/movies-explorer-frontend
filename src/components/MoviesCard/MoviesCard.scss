@@ -1,6 +1,7 @@
 .movie-card {
   max-width: 360px;
   position: relative;
+  list-style: none;
   &__image {
     border-radius: 6px;
     width: 100%;
@@ -41,13 +42,23 @@
     display: block;
   }
   &__save-button_active {
+    display: none;
     cursor: pointer;
+    position: absolute;
+    top: 14px;
+    right: 14px;
     color: transparent;
     background-color: #ee3465;
     width: 21px;
+    height: 21px;
+    border-radius: 50px;
+    border: none;
     background-image: url("../../images/icon_like.svg");
     background-repeat: no-repeat;
     background-position: center;
+  }
+  &__save-button_active_show {
+    display: block;
   }
   &__delete-button {
     cursor: pointer;

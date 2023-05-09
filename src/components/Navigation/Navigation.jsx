@@ -1,9 +1,18 @@
+import { useEffect } from "react";
 import "./navigation.scss";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import logo from "../../images/logo.svg";
 function Navigation({ onMenuClick }) {
+  const location = useLocation();
+  useEffect(() => {
+    console.log("location form", location);
+  }, [location]);
+
   return (
     <nav className='navigation'>
-      <Link className='navigation__logo' to='/'></Link>
+      <Link to='/'>
+        <img src={logo} alt='Логотип' className='navigation__logo' />
+      </Link>
       <div className='navigation__menu'>
         <NavLink
           to='/movies'
@@ -16,6 +25,7 @@ function Navigation({ onMenuClick }) {
 
         <NavLink
           to='/saved-movies'
+          state={"test state"}
           className={({ isActive }) =>
             `${isActive ? "navigation__link_active" : "navigation__link"}`
           }

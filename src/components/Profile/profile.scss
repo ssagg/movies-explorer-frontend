@@ -45,7 +45,37 @@
     margin-bottom: 15px;
     border-radius: 3px;
   }
-
+  &__save {
+    display: none;
+  }
+  &__save_show {
+    display: block;
+    background-color: #3456f3;
+    color: white;
+    margin-top: 250px;
+    border: none;
+    border-radius: 3px;
+    height: 45px;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
+    &:hover {
+      opacity: 0.8;
+      cursor: pointer;
+    }
+  }
+  &__save_show_disabled {
+    border: 1px solid #000000;
+    background-color: transparent;
+    color: #000000;
+    opacity: 0.2;
+    border-radius: 2px;
+    &:hover {
+      opacity: 0.2;
+      cursor: not-allowed;
+    }
+  }
   &__button:hover {
     opacity: 0.8;
     cursor: pointer;
@@ -103,6 +133,8 @@
     outline: 1px solid transparent;
   }
   &__edit {
+    border: none;
+    background-color: transparent;
     margin-top: 220px;
     display: flex;
     flex-direction: column;
@@ -118,10 +150,21 @@
       cursor: pointer;
     }
   }
+  &__edit_disabled {
+    display: none;
+  }
   &__logout-link {
     color: #ee3465;
     text-decoration: none;
     margin-top: 16px;
+    border: none;
+    background-color: transparent;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  &__logout-link_disabled {
+    display: none;
   }
 }
 

@@ -1,12 +1,11 @@
 import "./savedMovies.scss";
 import React, { useState } from "react";
-import Navigation from "../Navigation/Navigation";
 import SearchForm from "../SearchForm/SerachForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
-import Footer from "../Footer/Footer";
 import film1 from "../../images/film1.png";
 
-function SavedMovies({ movies }) {
+function SavedMovies({ savedMovie, onChange, checked }) {
+  console.log(savedMovie);
   const [showButton, setShowButton] = useState(false);
   const showLikeButtonClassName = `movie-card__delete-button ${
     showButton && "movie-card__delete-button_active"
@@ -22,8 +21,8 @@ function SavedMovies({ movies }) {
 
   return (
     <div className='saved-movies'>
-      <Navigation />
-      <SearchForm />
+      <SearchForm onChange={onChange} checked={checked} />
+      {/* <MoviesCardList savedMovie={savedMovie} /> */}
       <section className='movies-list'>
         <div className='movie-card'>
           <img
@@ -31,13 +30,14 @@ function SavedMovies({ movies }) {
             src={film1}
             alt='film'
             onMouseEnter={showDeleteButton}
+            onMouseLeave={hideDeleteButton}
           ></img>
 
           <button
             aria-label='Лайк'
             className={showLikeButtonClassName}
             type='button'
-            onMouseOver={showDeleteButton}
+            // onMouseOver={showDeleteButton}
           ></button>
 
           <div className='movie-card__text'>
@@ -86,7 +86,6 @@ function SavedMovies({ movies }) {
           </div>
         </div>
       </section>
-      <Footer />
     </div>
   );
 }

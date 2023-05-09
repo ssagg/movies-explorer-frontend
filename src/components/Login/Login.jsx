@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import "./Login.scss";
 
-function Login({ handleRegistration }) {
+function Login({ handleLogin }) {
   const {
     register,
     formState: { errors, isValid },
@@ -13,7 +13,7 @@ function Login({ handleRegistration }) {
   });
 
   function onSubmit(password, email) {
-    handleRegistration(password, email);
+    handleLogin(password, email);
   }
 
   return (

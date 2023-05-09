@@ -4,7 +4,6 @@ import Header from "../Header/Header";
 function Promo() {
   return (
     <section className='promo'>
-      <Header />
       <div className='promo__block'>
         <div className='promo__text'>
           <h1 className='promo__title'>

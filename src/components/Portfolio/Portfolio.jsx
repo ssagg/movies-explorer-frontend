@@ -12,8 +12,8 @@ function Portfolio() {
             target='_blank'
           >
             Статичный сайт
+            <div className='portfolio__logo'>↗</div>
           </a>
-          <div className='portfolio__logo'>↗</div>
         </li>
         <li className='portfolio__link'>
           <a
@@ -22,9 +22,8 @@ function Portfolio() {
             target='_blank'
           >
             {" "}
-            Адаптивный сайт
+            Адаптивный сайт <div className='portfolio__logo'>↗</div>
           </a>
-          <div className='portfolio__logo'>↗</div>
         </li>
         <li className='portfolio__link'>
           <a
@@ -32,9 +31,8 @@ function Portfolio() {
             href='https://ssagg.github.io/mesto-react/'
             target='_blank'
           >
-            Одностраничное приложение
+            Одностраничное приложение <div className='portfolio__logo'>↗</div>
           </a>
-          <div className='portfolio__logo'>↗</div>
         </li>
       </ul>
     </section>

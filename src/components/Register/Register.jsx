@@ -12,8 +12,8 @@ function Register({ handleRegistration }) {
     mode: "onChange",
   });
 
-  function onSubmit(password, email) {
-    handleRegistration(password, email);
+  function onSubmit(name, password, email) {
+    handleRegistration(name, password, email);
   }
 
   return (
@@ -106,7 +106,9 @@ function Register({ handleRegistration }) {
         </span>
         <button
           disabled={!isValid}
-          className={`register__button ${!isValid && "register__button_disabled"}`}
+          className={`register__button ${
+            !isValid && "register__button_disabled"
+          }`}
           type='submit'
           id={`button-register`}
         >

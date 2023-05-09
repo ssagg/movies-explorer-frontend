@@ -3,6 +3,9 @@
   flex-direction: column;
   background-color: #f8f8f8;
   color: #a0a0a0;
+  &_hide {
+    display: none;
+  }
 
   &__bottom-block {
     margin: 0 70px 0;
@@ -37,6 +40,7 @@
   }
 
   &__link {
+    color: #000000;
     text-decoration: none;
     margin-left: 20px;
     &:visited {

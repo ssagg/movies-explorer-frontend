@@ -4,11 +4,21 @@ import SearchForm from "../SearchForm/SerachForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import Footer from "../Footer/Footer";
 import Navigation from "../Navigation/Navigation";
+import Preloader from "../Preloader/Preloader";
 import { useState, useEffect } from "react";
 
-function Movies({ movies, onMenuClick }) {
+function Movies({
+  movies,
+  onMenuClick,
+  isLoading,
+  onSearchClick,
+  checked,
+  onChange,
+  onSaveMovie,
+}) {
   const [noOfElement, setNoOfElement] = useState(12);
   const [numShowMovies, setNumShowMovies] = useState(3);
+
   const slice = movies.slice(0, noOfElement);
   const loadmore = () => {
     setNoOfElement(noOfElement + numShowMovies);
@@ -37,15 +47,20 @@ function Movies({ movies, onMenuClick }) {
 
   return (
     <div className='movies'>
-      <Navigation onMenuClick={onMenuClick} />
-      <SearchForm />
-      <MoviesCardList slice={slice} />
+      {/* <Navigation onMenuClick={onMenuClick} /> */}
+      <SearchForm
+        onSearchClick={onSearchClick}
+        onChange={onChange}
+        checked={checked}
+      />
+      {isLoading && <Preloader />}
+
+      <MoviesCardList slice={slice} onSaveMovie={onSaveMovie} />
       <div className='movies__more'>
         <button className='movies__button' onClick={loadmore}>
           Ещё
         </button>
       </div>
-      <Footer />
     </div>
   );
 }
