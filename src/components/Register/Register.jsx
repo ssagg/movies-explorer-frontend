@@ -12,8 +12,12 @@ function Register({ handleRegistration }) {
     mode: "onChange",
   });
 
-  function onSubmit(name, password, email) {
-    handleRegistration(name, password, email);
+  function onSubmit(userCredentials) {
+    handleRegistration(
+      userCredentials.name,
+      userCredentials.password,
+      userCredentials.email
+    );
   }
 
   return (

@@ -1,4 +1,7 @@
-export const BASE_URL = "http://localhost:3001";
+// export const BASE_URL = "http://localhost:3001";
+export const BASE_URL =
+  "http://api.diplom.ssagg.nomoredomains.work" ||
+  "https://api.diplom.ssagg.nomoredomains.work";
 const getResponse = (res) => {
   return res.ok ? res.json() : Promise.reject(`Ошибка ${res.status}`);
 };
@@ -6,7 +9,6 @@ let auth = { "Content-Type": "application/json" };
 
 export const setHeaders = (token) => {
   auth = { ...auth, Authorization: `Bearer ${token}` };
-  console.log(auth);
 };
 
 export const signup = (name, password, email) => {
@@ -15,7 +17,7 @@ export const signup = (name, password, email) => {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(name, password, email),
+    body: JSON.stringify({ name, password, email }),
   }).then(getResponse);
 };
 
@@ -23,7 +25,7 @@ export const signin = (password, email) => {
   return fetch(`${BASE_URL}/signin`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(password, email),
+    body: JSON.stringify({ password, email }),
   }).then(getResponse);
 };
 
@@ -62,9 +64,6 @@ export const saveMovie = (
   return fetch(`${BASE_URL}/movies`, {
     method: "POST",
     headers: auth,
-    // {
-    //   "Content-Type": "application/json",
-    // },
     body: JSON.stringify({
       country,
       director,
@@ -84,9 +83,7 @@ export const saveMovie = (
 export const deleteLike = (id) => {
   return fetch(`${BASE_URL}/movies/${id}`, {
     method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: auth,
   }).then(getResponse);
 };
 
@@ -103,15 +100,3 @@ export const getSavedMovies = () => {
     headers: auth,
   }).then(getResponse);
 };
-
-// "country":"USA/Germany/Canada",
-//  "director":"J. J. Abrams",
-//  "duration":60,
-//  "year":"2025",
-//  "description":"Tenant 2",
-//  "image":"https://img1.goodfon.ru/original/2880x1800/7/cb/zhivotnye-pticy-vorony-para.jpg",
-//  "trailerLink":"https://www.youtube.com/watch?v=AZGcmvrTX9M",
-//  "nameRU":"Миссия Невыполнима",
-//  "nameEN":"Mission Imposible",
-//  "thumbnail":"https://img1.goodfon.ru/original/2880x1800/7/cb/zhivotnye-pticy-vorony-para.jpg",
-//  "movieId":22

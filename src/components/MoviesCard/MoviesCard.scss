@@ -42,7 +42,8 @@
     display: block;
   }
   &__save-button_active {
-    display: none;
+    // display: none;
+
     cursor: pointer;
     position: absolute;
     top: 14px;
@@ -93,6 +94,7 @@
     font-weight: 500;
     font-size: 13px;
     line-height: 16px;
+    max-width: 270px;
   }
   &__duration {
     border-radius: 3px;

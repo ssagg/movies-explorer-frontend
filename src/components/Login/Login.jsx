@@ -12,8 +12,8 @@ function Login({ handleLogin }) {
     mode: "onChange",
   });
 
-  function onSubmit(password, email) {
-    handleLogin(password, email);
+  function onSubmit(userCredentials) {
+    handleLogin(userCredentials.password, userCredentials.email);
   }
 
   return (

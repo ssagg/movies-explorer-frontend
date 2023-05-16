@@ -9,6 +9,7 @@ import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import NotFoundPage from "../NotFoundPage/NotFoundPage";
 import ModalMenu from "../ModalMenu/ModalMenu";
+import InfoTooltip from "../InfoTooltip/InfoTooltip";
 import { LoginDataContext } from "../Contexts/LoginDataContext";
 import { CurrentUserContext } from "../Contexts/CurrentUserContext";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
@@ -18,60 +19,81 @@ import { api } from "../../utils/MoviesApi";
 import * as mainApi from "../../utils/MainApi";
 
 function App() {
-  const [checked, setChecked] = useState(false);
-  console.log(checked);
+  const [isRegPopupOpen, setIsRegPopupOpen] = useState(false);
+  const [isRegSuccess, setIsRegSuccess] = useState(false);
   const [isSideMenuOpen, setSideMenuOpen] = useState(false);
   const [movies, setMovies] = useState([]);
   const [savedMovie, setSavedMovie] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [searchError, setSearchError] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
+  const [isShortMovie, setIsShotMovie] = useState(false);
+  const [isSearchReq, setIsSearchReq] = useState("");
   const navigate = useNavigate();
 
-  function handleLogin(userCredentials) {
+  const onIsShortMovieChange = (checked) => {
+    setIsShotMovie(checked);
+  };
+
+  useEffect(() => {
+    if (loggedIn) {
+      localStorage.setItem("isShortFilm", JSON.stringify(isShortMovie));
+    }
+  }, [loggedIn]);
+
+  function handleLogin(password, email) {
     mainApi
-      .signin(userCredentials)
+      .signin(password, email)
       .then((res) => {
-        console.log(res);
         localStorage.setItem("token", res.jwt);
-        api.setHeaders(res.jwt);
         mainApi.setHeaders(res.jwt);
         setLoggedIn(true);
         navigate("/movies", { replace: true });
       })
-      .catch((err) => console.log(err))
-      .finally(() => {
-        // loadUserEmail(userCredentials);
-      });
+      .catch((err) => console.log(err));
   }
-  function handleRegistration(userCredentials) {
+
+  function handleRegistration(name, password, email) {
     mainApi
-      .signup(userCredentials)
+      .signup(name, password, email)
       .then((res) => {
-        console.log(res);
-        localStorage.setItem("token", res.jwt);
-        mainApi.setHeaders(res.jwt);
-        // setIsRegPopupOpen(!isRegPopupOpen);
-        // setIsRegSuccess(true);
-        navigate("/movies", { replace: true });
+        handleLogin(password, email);
       })
       .catch((err) => {
-        // setIsRegPopupOpen(!isRegPopupOpen);
-        // setIsRegSuccess(false);
+        setIsRegPopupOpen(!isRegPopupOpen);
+        setIsRegSuccess(false);
         console.log(err);
       });
   }
+
   function handleLogout() {
     setLoggedIn(false);
+    localStorage.clear();
   }
+
+  function handleUpdateUser(data) {
+    mainApi
+      .updateUserInfo(data)
+      .then((userData) => {
+        setIsRegPopupOpen(!isRegPopupOpen);
+        setIsRegSuccess(true);
+        setCurrentUser(userData);
+      })
+      .catch((error) => {
+        setIsRegPopupOpen(!isRegPopupOpen);
+        setIsRegSuccess(false);
+        console.log(error);
+      });
+  }
+
   useEffect(() => {
     tokenCheck();
     if (loggedIn) {
       mainApi
         .getSavedMovies()
-        .then((mySavedMovie) => {
-          console.log(mySavedMovie);
-          setSavedMovie([...mySavedMovie]);
+        .then((savedMovie) => {
+          setSavedMovie([...savedMovie]);
         })
         .catch((err) => {
           console.log(err);
@@ -80,67 +102,61 @@ function App() {
   }, [loggedIn]);
 
   const handleSearchClick = () => {
-    setIsLoading(true);
-    // tokenCheck()
-    // if (loggedIn) {
-    api
-      .getMovies()
-      .then((movies) => {
-        console.log(movies);
-        localStorage.setItem("movies", JSON.stringify(movies));
-        const localMovies = JSON.parse(localStorage.getItem("movies"));
-        console.log(localMovies);
-        const searchReq = JSON.parse(
-          localStorage.getItem("searchReq").toLowerCase()
-        );
-        console.log(searchReq.search);
-        const showMovies = localMovies.filter((i) =>
-          i.nameRU.toLowerCase().match(searchReq.search)
-        );
-        console.log(showMovies);
+    if ("movies" in localStorage) {
+      const localMovies = JSON.parse(localStorage.getItem("movies"));
+      const searchReq = JSON.parse(
+        localStorage.getItem("searchReq").toLowerCase()
+      );
+      setIsSearchReq(searchReq.search);
+      const showMovies = localMovies.filter((i) =>
+        i.nameRU.toLowerCase().match(searchReq.search)
+      );
+      localStorage.setItem("showedMovies", JSON.stringify(showMovies));
+      setMovies([...showMovies]);
+    } else {
+      setIsLoading(true);
+      api
+        .getMovies()
+        .then((movies) => {
+          localStorage.setItem("movies", JSON.stringify(movies));
+        })
+        .catch((error) => {
+          setSearchError(true);
+          console.log(error);
+        })
+        .finally(() => {
+          setSearchError(false);
+          setIsLoading(false);
+          const localMovies = JSON.parse(localStorage.getItem("movies"));
+          const searchReq = JSON.parse(
+            localStorage.getItem("searchReq").toLowerCase()
+          );
+          setIsSearchReq(searchReq.search);
+          const showMovies = localMovies.filter((i) =>
+            i.nameRU.toLowerCase().match(searchReq.search)
+          );
+          localStorage.setItem("showedMovies", JSON.stringify(showMovies));
+          setMovies([...showMovies]);
+        });
+    }
+  };
 
-        setMovies([...showMovies]);
-
-        // setCurrentUser(userData);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+  const handleSearchSavedMoviesClick = (searchReq) => {
+    const showSearchedSavedMovies = savedMovie.filter((i) =>
+      i.nameRU.toLowerCase().match(searchReq.search)
+    );
+    setSavedMovie([...showSearchedSavedMovies]);
   };
 
   function handleSideMemuClick() {
     setSideMenuOpen(!isSideMenuOpen);
   }
-  function closeMenu() {
+  function closeAllPopups() {
     setSideMenuOpen(false);
+    setIsRegPopupOpen(false);
   }
-  useEffect(() => {
-    localStorage.setItem("isShortFilm", JSON.stringify(checked));
-  }, [checked]);
 
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   // tokenCheck()
-  //   // if (loggedIn) {
-  //   api
-  //     .getMovies()
-  //     .then((movies) => {
-  //       setMovies([...movies]);
-  //       // setCurrentUser(userData);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     })
-  //     .finally(() => {
-  //       setIsLoading(false);
-  //     });
-  //   // }
-  // }, []);
   function handleSaveMovie(
-    // movie
     country,
     director,
     duration,
@@ -153,71 +169,55 @@ function App() {
     thumbnail,
     movieId
   ) {
-    const urlSite = "https://api.nomoreparties.co";
-    console.log(image);
-    mainApi
-      .saveMovie(
-        country,
-        director,
-        duration,
-        year,
-        description,
-        image,
-        trailerLink,
-        nameRU,
-        nameEN,
-        thumbnail,
-        movieId
-      )
-      .then((movie) => {
-        console.log(movie);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const issetLiked = savedMovie.some((i) => i.movieId === movieId);
+    if (!issetLiked) {
+      mainApi
+        .saveMovie(
+          country,
+          director,
+          duration,
+          year,
+          description,
+          image,
+          trailerLink,
+          nameRU,
+          nameEN,
+          thumbnail,
+          movieId
+        )
+        .then((movie) => {
+          setSavedMovie([movie, ...savedMovie]);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   }
 
-  function handleUpdateUser(data) {
-    setIsLoading(true);
+  function handleDeleteMovie(movie) {
     mainApi
-      .updateUserInfo(data)
-      .then((userData) => {
-        setCurrentUser(userData);
-        // closeAllPopups();
+      .deleteLike(movie._id)
+      .then(() => {
+        setSavedMovie((state) =>
+          state.filter((i) => i.movieId !== movie.movieId)
+        );
       })
       .catch((error) => {
         console.log(error);
-      })
-      .finally(() => {
-        setIsLoading(false);
       });
   }
 
   useEffect(() => {
     tokenCheck();
-    // if (loggedIn) {
-    //   mainApi
-    //     .getUserInfo()
-    //     .then((userData) => {
-    //       console.log(userData);
-    //       setCurrentUser(userData);
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // }
   }, [loggedIn]);
 
   function tokenCheck() {
     const token = localStorage.getItem("token");
     if (token) {
       mainApi.userValidation(token).then((res) => {
-        console.log(res);
-        api.setHeaders(token);
         mainApi.setHeaders(token);
         setLoggedIn(true);
         setCurrentUser(res);
-        // loadUserEmail(res);
         navigate("/movies", { replace: true });
       });
     }
@@ -235,7 +235,7 @@ function App() {
                 loggedIn ? (
                   <Navigate to='/movies' replace />
                 ) : (
-                  <Navigate to='/signin' replace />
+                  <Navigate to='/' replace />
                 )
               }
             />
@@ -256,11 +256,15 @@ function App() {
                   <Movies
                     isLoading={isLoading}
                     movies={movies}
+                    savedMovie={savedMovie}
                     onMenuClick={handleSideMemuClick}
                     onSearchClick={handleSearchClick}
-                    checked={checked}
-                    onChange={setChecked}
+                    checked={isShortMovie}
+                    onChange={onIsShortMovieChange}
                     onSaveMovie={handleSaveMovie}
+                    isShortMovie={isShortMovie}
+                    isSearchReq={isSearchReq}
+                    searchError={searchError}
                   />
                 }
               />
@@ -269,8 +273,11 @@ function App() {
                 element={
                   <SavedMovies
                     savedMovie={savedMovie}
-                    checked={checked}
-                    onChange={setChecked}
+                    checked={isShortMovie}
+                    onChange={onIsShortMovieChange}
+                    onDeleteMovie={handleDeleteMovie}
+                    isShortMovie={isShortMovie}
+                    onSearchClick={handleSearchSavedMoviesClick}
                   />
                 }
               />
@@ -285,9 +292,14 @@ function App() {
                 }
               />
             </Route>
-            <Route path='404' element={<NotFoundPage />} />
+            <Route path='*' element={<NotFoundPage />} />
           </Routes>
-          <ModalMenu isOpen={isSideMenuOpen} onClose={closeMenu} />
+          <ModalMenu isOpen={isSideMenuOpen} onClose={closeAllPopups} />
+          <InfoTooltip
+            isOpen={isRegPopupOpen}
+            onClose={closeAllPopups}
+            isRegSuccess={isRegSuccess}
+          />
           <Footer />
         </LoginDataContext.Provider>
       </CurrentUserContext.Provider>

@@ -1,6 +1,6 @@
 import "./Promo.scss";
 import NavTab from "../NavTab/NavTab";
-import Header from "../Header/Header";
+
 function Promo() {
   return (
     <section className='promo'>

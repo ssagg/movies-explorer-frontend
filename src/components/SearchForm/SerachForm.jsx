@@ -1,12 +1,19 @@
 import "./SearchForm.scss";
 import ToggleSwitch from "../ToogleSwitch/ToggleSwitch";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
-function SearchForm({ onSearchClick, checked, onChange }) {
+import { useEffect } from "react";
+function SearchForm({ onSearchClick, checked, onChange, isSearchReq }) {
+  useEffect(() => {
+    const defaultValues = {};
+    defaultValues.search = isSearchReq;
+    reset({ ...defaultValues });
+  }, []);
+
   const {
     register,
     formState: { errors, isValid },
     handleSubmit,
+    reset,
   } = useForm({
     mode: "onChange",
   });

@@ -9,22 +9,31 @@ function MoviesCardList({
   onCardClick,
   onCardLike,
   onSaveMovie,
+  onDeleteMovie,
+  isShortMovie,
 }) {
   const location = useLocation();
   if (location.pathname === "/saved-movies") {
-    console.log(location);
     slice = savedMovie;
   }
+
+  if (isShortMovie) {
+    slice = slice.filter((movie) => movie.duration <= 40);
+  }
+
   return (
     <section className='movies-list'>
       {slice.map((movie) => {
         return (
           <MoviesCard
             movie={movie}
-            key={movie.id}
+            key={movie.id || movie._id}
             onCardClick={onCardClick}
             onCardLike={onCardLike}
             onSaveMovie={onSaveMovie}
+            onDeleteMovie={onDeleteMovie}
+            savedMovie={savedMovie}
+            isShortMovie={isShortMovie}
           />
         );
       })}

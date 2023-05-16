@@ -4,9 +4,7 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import logo from "../../images/logo.svg";
 function Navigation({ onMenuClick }) {
   const location = useLocation();
-  useEffect(() => {
-    console.log("location form", location);
-  }, [location]);
+  useEffect(() => {}, [location]);
 
   return (
     <nav className='navigation'>

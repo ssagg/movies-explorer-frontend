@@ -9,13 +9,14 @@ function Header({ onMenuClick }) {
   const location = useLocation();
   const loggedIn = useContext(LoginDataContext);
   let headerClass = `${
-    // loggedIn ||
     location.pathname === "/signin" || location.pathname === "/signup"
       ? "header header_hide"
       : "header"
   }`;
-  if (loggedIn) {
-    headerClass = "header header_back";
+  if (location.pathname === "/") {
+    headerClass = "header header_back header_back_main";
+  } else if (location.pathname !== "/") {
+    headerClass = "header header_back ";
   }
 
   return (
@@ -24,7 +25,6 @@ function Header({ onMenuClick }) {
         ((headerClass = "header_back"),
         (<Navigation onMenuClick={onMenuClick} />))
       ) : (
-        // location.pathname === "/sign-in" ?
         <>
           <Link to='/'>
             <img src={logo} alt='Логотип' className='header__logo' />
