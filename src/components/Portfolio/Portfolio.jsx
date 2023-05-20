@@ -10,6 +10,7 @@ function Portfolio() {
             className='portfolio__link-a'
             href='https://ssagg.github.io/russian-travel_GH_pages_test/'
             target='_blank'
+            rel='noreferrer'
           >
             Статичный сайт
             <div className='portfolio__logo'>↗</div>
@@ -20,6 +21,7 @@ function Portfolio() {
             className='portfolio__link-a'
             href='https://ssagg.github.io/russian-travel_GH_pages_test/'
             target='_blank'
+            rel='noreferrer'
           >
             {" "}
             Адаптивный сайт <div className='portfolio__logo'>↗</div>

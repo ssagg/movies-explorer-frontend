@@ -26,6 +26,9 @@
     text-decoration: none;
     color: #3456f3;
     text-decoration: none;
+    &:hover {
+      cursor: pointer;
+    }
   }
 }
 

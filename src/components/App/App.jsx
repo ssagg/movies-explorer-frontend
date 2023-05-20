@@ -5,20 +5,20 @@ import Login from "../Login/Login";
 import Movies from "../Movies/Movies";
 import SavedMovies from "../SavedMovies/SavedMovies";
 import Profile from "../Profile/Profile";
-import Header from "../Header/Header";
-import Footer from "../Footer/Footer";
+import Layout from "../Layout/Layout";
 import NotFoundPage from "../NotFoundPage/NotFoundPage";
 import ModalMenu from "../ModalMenu/ModalMenu";
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
 import { LoginDataContext } from "../Contexts/LoginDataContext";
 import { CurrentUserContext } from "../Contexts/CurrentUserContext";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
-import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { api } from "../../utils/MoviesApi";
 import * as mainApi from "../../utils/MainApi";
 
 function App() {
+  const location = useLocation();
   const [isRegPopupOpen, setIsRegPopupOpen] = useState(false);
   const [isRegSuccess, setIsRegSuccess] = useState(false);
   const [isSideMenuOpen, setSideMenuOpen] = useState(false);
@@ -88,7 +88,17 @@ function App() {
   }
 
   useEffect(() => {
-    tokenCheck();
+    const closeByEsc = (evt) => {
+      if (evt.key === "Escape") {
+        evt.preventDefault();
+        closeAllPopups();
+      }
+    };
+    document.addEventListener("keydown", closeByEsc);
+    return () => document.removeEventListener("keydown", closeByEsc);
+  }, []);
+
+  useEffect(() => {
     if (loggedIn) {
       mainApi
         .getSavedMovies()
@@ -148,7 +158,7 @@ function App() {
     setSavedMovie([...showSearchedSavedMovies]);
   };
 
-  function handleSideMemuClick() {
+  function handleSideMenuClick() {
     setSideMenuOpen(!isSideMenuOpen);
   }
   function closeAllPopups() {
@@ -191,6 +201,18 @@ function App() {
         .catch((error) => {
           console.log(error);
         });
+    } else {
+      const savedMovieId = savedMovie.find(
+        (item) => item.movieId === movieId
+      )._id;
+      mainApi
+        .deleteLike(savedMovieId)
+        .then(() => {
+          setSavedMovie((state) => state.filter((i) => i.movieId !== movieId));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   }
 
@@ -218,7 +240,7 @@ function App() {
         mainApi.setHeaders(token);
         setLoggedIn(true);
         setCurrentUser(res);
-        navigate("/movies", { replace: true });
+        navigate(location.pathname, { replace: true });
       });
     }
   }
@@ -227,72 +249,64 @@ function App() {
     <div className='page'>
       <CurrentUserContext.Provider value={currentUser}>
         <LoginDataContext.Provider value={loggedIn}>
-          <Header onMenuClick={handleSideMemuClick} />
           <Routes>
-            <Route
-              path='*'
-              element={
-                loggedIn ? (
-                  <Navigate to='/movies' replace />
-                ) : (
-                  <Navigate to='/' replace />
-                )
-              }
-            />
-
-            <Route path='/' element={<Main />} />
-            <Route
-              path='signup'
-              element={<Register handleRegistration={handleRegistration} />}
-            />
-            <Route
-              path='signin'
-              element={<Login handleLogin={handleLogin} />}
-            />
-            <Route element={<ProtectedRoute loggedIn={loggedIn} />}>
-              <Route
-                path='movies'
-                element={
-                  <Movies
-                    isLoading={isLoading}
-                    movies={movies}
-                    savedMovie={savedMovie}
-                    onMenuClick={handleSideMemuClick}
-                    onSearchClick={handleSearchClick}
-                    checked={isShortMovie}
-                    onChange={onIsShortMovieChange}
-                    onSaveMovie={handleSaveMovie}
-                    isShortMovie={isShortMovie}
-                    isSearchReq={isSearchReq}
-                    searchError={searchError}
+            <Route path='/'>
+              <Route element={<Layout onMenuClick={handleSideMenuClick} />}>
+                <Route index element={<Main />} />
+                <Route element={<ProtectedRoute loggedIn={loggedIn} />}>
+                  <Route
+                    path='movies'
+                    element={
+                      <Movies
+                        isLoading={isLoading}
+                        movies={movies}
+                        savedMovie={savedMovie}
+                        onMenuClick={handleSideMenuClick}
+                        onSearchClick={handleSearchClick}
+                        checked={isShortMovie}
+                        onChange={onIsShortMovieChange}
+                        onSaveMovie={handleSaveMovie}
+                        isShortMovie={isShortMovie}
+                        isSearchReq={isSearchReq}
+                        searchError={searchError}
+                      />
+                    }
                   />
-                }
+                  <Route
+                    path='saved-movies'
+                    element={
+                      <SavedMovies
+                        savedMovie={savedMovie}
+                        checked={isShortMovie}
+                        onChange={onIsShortMovieChange}
+                        onDeleteMovie={handleDeleteMovie}
+                        isShortMovie={isShortMovie}
+                        onSearchClick={handleSearchSavedMoviesClick}
+                      />
+                    }
+                  />
+                  <Route
+                    path='profile'
+                    element={
+                      <Profile
+                        onMenuClick={handleSideMenuClick}
+                        handleLogout={handleLogout}
+                        handleUpdateUser={handleUpdateUser}
+                      />
+                    }
+                  />
+                </Route>
+              </Route>
+              <Route
+                path='signup'
+                element={<Register handleRegistration={handleRegistration} />}
               />
               <Route
-                path='saved-movies'
-                element={
-                  <SavedMovies
-                    savedMovie={savedMovie}
-                    checked={isShortMovie}
-                    onChange={onIsShortMovieChange}
-                    onDeleteMovie={handleDeleteMovie}
-                    isShortMovie={isShortMovie}
-                    onSearchClick={handleSearchSavedMoviesClick}
-                  />
-                }
+                path='signin'
+                element={<Login handleLogin={handleLogin} />}
               />
-              <Route
-                path='profile'
-                element={
-                  <Profile
-                    onMenuClick={handleSideMemuClick}
-                    handleLogout={handleLogout}
-                    handleUpdateUser={handleUpdateUser}
-                  />
-                }
-              />
+              <Route path='*' element={<NotFoundPage />} />
             </Route>
-            <Route path='*' element={<NotFoundPage />} />
           </Routes>
           <ModalMenu isOpen={isSideMenuOpen} onClose={closeAllPopups} />
           <InfoTooltip
@@ -300,7 +314,6 @@ function App() {
             onClose={closeAllPopups}
             isRegSuccess={isRegSuccess}
           />
-          <Footer />
         </LoginDataContext.Provider>
       </CurrentUserContext.Provider>
     </div>

@@ -23,8 +23,9 @@ function Movies({
   const loadmore = () => {
     setNoOfElement(noOfElement + numShowMovies);
   };
+
   const isMoreButtonShow = useMemo(() => {
-    if (slice === null || slice.length === 100) {
+    if (slice === null || slice.length < movies.length) {
       return false;
     } else {
       return true;
@@ -32,9 +33,10 @@ function Movies({
   }, [slice]);
 
   useEffect(() => {
-    window.addEventListener("resize", function (e) {
-      setTimeout(handleResize, 2000);
-    });
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
 
     function handleResize() {
       if (window.innerWidth < 1170) {
@@ -49,11 +51,7 @@ function Movies({
         setNumShowMovies(3);
       }
     }
-
-    return (_) => {
-      window.removeEventListener("resize", handleResize);
-    };
-  });
+  }, []);
 
   return (
     <div className='movies'>
@@ -78,7 +76,7 @@ function Movies({
           isShortMovie={isShortMovie}
         />
       )}
-      {isMoreButtonShow && (
+      {!isMoreButtonShow && (
         <div className='movies__more'>
           <button className='movies__button' onClick={loadmore}>
             Ещё
@@ -89,4 +87,4 @@ function Movies({
   );
 }
 
-export default Movies;
+export default React.memo(Movies);

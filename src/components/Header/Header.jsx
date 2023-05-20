@@ -15,7 +15,11 @@ function Header({ onMenuClick }) {
   }`;
   if (location.pathname === "/") {
     headerClass = "header header_back header_back_main";
-  } else if (location.pathname !== "/") {
+  } else if (
+    location.pathname === "/movies" ||
+    location.pathname === "/saved-movies" ||
+    location.pathname === "/profile"
+  ) {
     headerClass = "header header_back ";
   }
 

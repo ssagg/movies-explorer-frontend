@@ -10,4 +10,4 @@ JS, React
 
 ### Ссылки на проект
 
-http://diplom.ssagg.nomoredomains.work/
+https://diplom.ssagg.nomoredomains.work/

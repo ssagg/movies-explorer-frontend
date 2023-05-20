@@ -1,26 +1,22 @@
 import "./MoviesCard.scss";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 
 function MoviesCard({ movie, onSaveMovie, onDeleteMovie, savedMovie }) {
   const location = useLocation();
-  const [isLiked, setIsLiked] = useState(false);
   const [showButton, setShowButton] = useState(false);
   const [showDelButton, setShowDeleteButton] = useState(false);
 
-  let issetLiked = savedMovie
-    ? savedMovie.some((i) => i.movieId === movie.id)
-    : false;
-
-  useEffect(() => {
-    if (issetLiked) {
-      setIsLiked(true);
-    }
-  }, []);
+  const hours = Math.floor(movie.duration / 60);
+  const minutes = movie.duration % 60;
 
   const urli = "https://api.nomoreparties.co";
   let img = "";
   let movieButton = "";
+
+  let issetLiked = savedMovie
+    ? savedMovie.some((i) => i.movieId === movie.id)
+    : false;
 
   if (location.pathname === "/movies") {
     img = `${urli}${movie.image.url}`;
@@ -30,12 +26,11 @@ function MoviesCard({ movie, onSaveMovie, onDeleteMovie, savedMovie }) {
     movieButton = showDeleteButton;
   }
 
-  function handelDeleteClick() {
+  function handleDeleteClick() {
     onDeleteMovie(movie);
   }
 
   function handleLikeClick() {
-    setIsLiked(true);
     onSaveMovie(
       movie.country,
       movie.director,
@@ -60,7 +55,7 @@ function MoviesCard({ movie, onSaveMovie, onDeleteMovie, savedMovie }) {
   }
 
   function hideLikeButton() {
-    if (!isLiked) {
+    if (!issetLiked) {
       setShowButton(false);
     }
     setShowDeleteButton(false);
@@ -86,15 +81,15 @@ function MoviesCard({ movie, onSaveMovie, onDeleteMovie, savedMovie }) {
             showDelButton && "movie-card__delete-button_active"
           }`}
           type='button'
-          onClick={handelDeleteClick}
+          onClick={handleDeleteClick}
           onMouseOver={movieButton}
         ></button>
       ) : (
         <button
           aria-label='Лайк'
           className={
-            isLiked
-              ? `movie-card__save-button movie-card__save-button_active movie-card__save-button_show`
+            issetLiked
+              ? `movie-card__save-button_active movie-card__save-button_show`
               : `movie-card__save-button ${
                   showButton && "movie-card__save-button_show"
                 }`
@@ -110,7 +105,7 @@ function MoviesCard({ movie, onSaveMovie, onDeleteMovie, savedMovie }) {
       <div className='movie-card__text'>
         <h3 className='movie-card__title'>{movie.nameRU}</h3>
         <p className='movie-card__duration'>
-          {Math.floor(movie.duration / 60)}ч {movie.duration % 60}м
+          {`${hours === 0 ? "" : hours + "ч"} ${minutes}м`}
         </p>
       </div>
     </li>

@@ -1,7 +1,7 @@
 // export const BASE_URL = "http://localhost:3001";
 export const BASE_URL =
-  "http://api.diplom.ssagg.nomoredomains.work" ||
-  "https://api.diplom.ssagg.nomoredomains.work";
+  "https://api.diplom.ssagg.nomoredomains.work" ||
+  "http://api.diplom.ssagg.nomoredomains.work";
 const getResponse = (res) => {
   return res.ok ? res.json() : Promise.reject(`Ошибка ${res.status}`);
 };
@@ -84,14 +84,6 @@ export const deleteLike = (id) => {
   return fetch(`${BASE_URL}/movies/${id}`, {
     method: "DELETE",
     headers: auth,
-  }).then(getResponse);
-};
-
-export const getUserInfo = () => {
-  return fetch(`${BASE_URL}/users/me`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
   }).then(getResponse);
 };
 
