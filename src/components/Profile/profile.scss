@@ -1,0 +1,217 @@
+.profile {
+  margin: auto;
+  max-width: 396px;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  &__container {
+    width: 396px;
+    display: flex;
+    flex-direction: column;
+  }
+  &__form {
+    display: flex;
+    flex-direction: column;
+    width: 396px;
+  }
+  &__input-form {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  &__title {
+    text-align: center;
+    color: #000000;
+    margin: 74px 0 123px;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 29px;
+    max-width: 396px;
+  }
+  &__button {
+    color: white;
+    background-color: #3456f3;
+    max-width: 396px;
+    height: 50px;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
+    margin-top: 134px;
+    border: 1px;
+    margin-bottom: 15px;
+    border-radius: 3px;
+  }
+  &__save {
+    display: none;
+  }
+  &__save_show {
+    display: block;
+    background-color: #3456f3;
+    color: white;
+    margin-top: 250px;
+    border: none;
+    border-radius: 3px;
+    height: 45px;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
+    &:hover {
+      opacity: 0.8;
+      cursor: pointer;
+    }
+  }
+  &__save_show_disabled {
+    border: 1px solid #000000;
+    background-color: transparent;
+    color: #000000;
+    opacity: 0.2;
+    border-radius: 2px;
+    &:hover {
+      opacity: 0.2;
+      cursor: not-allowed;
+    }
+  }
+  &__button:hover {
+    opacity: 0.8;
+    cursor: pointer;
+  }
+  &__error {
+    text-align: left;
+    max-width: 396px;
+    margin-top: 6px;
+    margin-bottom: 8px;
+    padding: 0;
+    min-height: 12px;
+  }
+  &__error_visible {
+    color: #ff0000;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+    text-align: right;
+  }
+
+  &__label {
+    margin-left: 2px;
+    text-align: left;
+    color: black;
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 13px;
+    width: 30%;
+  }
+  &__line {
+    margin-top: 16px;
+    border-bottom: 1px solid #e8e8e8;
+  }
+  &__input {
+    width: 70%;
+    background-color: transparent;
+    border: none;
+    color: black;
+    text-align: right;
+    direction: rtl;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 13px;
+    max-width: 396px;
+    &::placeholder {
+      font-weight: 400;
+      font-size: 11px;
+      line-height: 13px;
+      color: black;
+    }
+  }
+  &__input:focus {
+    border-bottom: 1px solid #3456f3;
+    outline: 1px solid transparent;
+  }
+  &__edit {
+    border: none;
+    background-color: transparent;
+    margin-top: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #a0a0a0;
+    text-align: center;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    text-decoration: none;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  &__edit_disabled {
+    display: none;
+  }
+  &__logout-link {
+    color: #ee3465;
+    text-decoration: none;
+    margin-top: 16px;
+    border: none;
+    background-color: transparent;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  &__logout-link_disabled {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile {
+    width: 410px;
+    align-items: center;
+    &__title {
+      margin: 236px 0 96px;
+    }
+    &__form {
+      max-width: 410px;
+    }
+    &__edit {
+      margin-top: 210px;
+    }
+    &__signup {
+      font-size: 12px;
+      line-height: 14.52px;
+    }
+    &__logout-link {
+      margin-bottom: 269px;
+    }
+  }
+}
+
+@media (max-width: 550px) {
+  .profile {
+    align-items: center;
+    max-width: 260px;
+    &__title {
+      margin: 70px 0 80px;
+
+      max-width: 260px;
+    }
+    &__form {
+      max-width: 260px;
+    }
+    &__edit {
+      margin-top: 379px;
+    }
+    &__signup {
+      font-size: 12px;
+      line-height: 14.52px;
+    }
+    &__logout-link {
+      margin-bottom: 40px;
+    }
+  }
+}
