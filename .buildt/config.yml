@@ -1,0 +1,10 @@
+name: movies-explorer-frontend
+id: 533abf44-b010-4617-af6c-a29a55b037db
+languages:
+  - TypeScript
+  - TSX
+extensions:
+  - .ts
+  - .cts
+  - .mts
+  - .tsx
